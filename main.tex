@@ -17,12 +17,12 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\rhead{Praktikumsbericht -- Serious Game Plattform}
+\rhead{Projektbericht -- Serious Game Plattform}
 \lhead{\leftmark}
 \cfoot{\thepage}
 
-\title{Praktikumsbericht\\[0.4em]\large Entwicklung einer Serious-Game-Plattform im Gesundheitskontext}
-\author{Max Mustermann\\Praktikumszeitraum: Oktober 2025 -- März 2026}
+\title{Projektbericht\\[0.4em]\large Weiterentwicklung einer Serious-Game-Plattform im Gesundheitskontext}
+\author{Max Mustermann\\Projektzeitraum: vier Monate}
 \date{\today}
 
 \begin{document}
@@ -35,197 +35,190 @@
 \newpage
 
 \section{Einleitung}
-Die Digitalisierung im Gesundheitswesen schreitet in hohem Tempo voran. Neben elektronischen Patientenakten, Telemedizin und mobilen Gesundheits-Apps gewinnen auch interaktive Lern- und Trainingsanwendungen zunehmend an Bedeutung. In diesem Kontext haben sich \textbf{Serious Games} als ein vielversprechender Ansatz etabliert: Sie kombinieren spielerische Mechaniken mit klaren funktionalen Zielsetzungen, beispielsweise Rehabilitation, Motivation, Verhaltensänderung oder Therapiebegleitung.
+Digitale Anwendungen gewinnen im Gesundheitskontext zunehmend an Bedeutung. Neben klassischen Web- und Mobile-Anwendungen entstehen immer mehr interaktive Systeme, die Training, Motivation und Verlaufskontrolle miteinander verbinden. In diesem Umfeld nehmen \textbf{Serious Games} eine besondere Rolle ein: Sie verknüpfen spielerische Elemente mit funktionalen Zielen wie Rehabilitation, Aktivierung, Therapiebegleitung oder strukturierter Datenerfassung.
 
-Während klassische Spiele primär auf Unterhaltung abzielen, stehen bei Serious Games messbare Mehrwerte im Vordergrund. Dazu zählen etwa eine gesteigerte Therapietreue, häufigere Übungsdurchführung, bessere Selbstwirksamkeit der Patientinnen und Patienten sowie eine strukturierte Datenerhebung für medizinisches Fachpersonal. Besonders in der Physiotherapie, Ergotherapie und neurologischen Nachsorge zeigt sich, dass spielerische Elemente den Zugang zu regelmäßigem Training erleichtern können.
+Das vorliegende Projekt befasst sich mit der Weiterentwicklung einer Serious-Game-Plattform, die mehrere technische Bausteine in einem gemeinsamen System zusammenführt. Dazu gehören ein Backend zur Daten- und Benutzerverwaltung, eine Weboberfläche für administrative und therapeutische Prozesse, ein Android-Launcher zur Bereitstellung mobiler Spiele sowie eine Test-App zur Überprüfung der Session- und Score-Übertragung.
 
-Bereits existierende Lösungen am Markt sind oft stark spezialisiert: Einige fokussieren auf einzelne Krankheitsbilder, andere auf bestimmte Endgeräte oder proprietäre Hardware. Zudem fehlt häufig eine durchgängige Plattformlogik, die mehrere Stakeholder (Admin, Therapeut, Patient), unterschiedliche Spieltypen (Desktop, Mobile, Web) und eine zentrale Auswertung in einem konsistenten System vereint. Genau an dieser Stelle setzt das Praktikumsprojekt an.
+Ziel dieses Berichts ist es, das Projekt inhaltlich als \textbf{Projektbericht} zu beschreiben. Im Vordergrund stehen daher nicht organisatorische Rahmenbedingungen eines Praktikums, sondern die Fragen, was das Projekt fachlich und technisch aussagt, welchen aktuellen Stand die Plattform erreicht hat und welche konkreten Beiträge innerhalb eines Zeitraums von vier Monaten umgesetzt wurden.
 
-Im Rahmen meines Praktikums war ich in die Weiterentwicklung einer Plattform eingebunden, die eine flexible Verwaltung, Zuweisung und Auswertung von Serious Games ermöglicht. Die Plattform verbindet Backend, Webanwendung, Android-Launcher sowie Test-APKs in einem gemeinsamen technischen und fachlichen Ökosystem.
-
-\section{Kurzüberblick: Ziel des Praktikumsprojekts}
-Das übergeordnete Ziel bestand darin, eine robuste und praxisnahe Serious-Game-Infrastruktur zu schaffen, die sich in den klinisch-therapeutischen Alltag integrieren lässt. Konkret sollten folgende Zielbilder erreicht werden:
-
-\begin{itemize}[leftmargin=1.5em]
-  \item \textbf{Technische Konsistenz:} Einheitliche Datenhaltung für Spiele, Patientenzuordnungen und Spielsessions.
-  \item \textbf{Rollenorientierte Bedienung:} Klare Trennung zwischen Administrations- und Behandlungsprozessen.
-  \item \textbf{Mobile Erweiterbarkeit:} Unterstützung von APK-basierten Spielen inklusive Upload- und Verteilprozess.
-  \item \textbf{Nachvollziehbare Auswertung:} Erfassung und Anzeige von Scores/Highscores sowie Session-Metadaten.
-  \item \textbf{Wartbarkeit:} Nachvollziehbare Struktur, dokumentierte Abläufe und erweiterbare Komponenten.
-\end{itemize}
-
-Das Praktikum war dabei nicht nur auf die reine Implementierung einzelner Features ausgelegt, sondern beinhaltete ebenso Analyse, Abstimmung, Tests, Fehlerbehebung und Dokumentation.
-
-\section{Projektkontext und Ausgangssituation}
-Zu Beginn des Praktikums lag bereits eine Grundarchitektur vor. Die Plattform bestand aus mehreren Teilprojekten:
+\section{Projektübersicht}
+\subsection{Was ist das Projekt?}
+Die Serious-Game-Plattform ist ein verteiltes Softwaresystem zur Verwaltung, Auslieferung und Auswertung digitaler Therapie- und Trainingsspiele. Der zentrale Gedanke besteht darin, verschiedene Rollen und Nutzungssituationen innerhalb einer Plattform zusammenzubringen:
 
 \begin{itemize}[leftmargin=1.5em]
-  \item \textbf{Backend} (Java/Spring): REST-APIs, Persistenz, Rollen- und Rechtekonzepte.
-  \item \textbf{Webapp} (Angular): Verwaltungsoberflächen für Admin und medizinisches Personal.
-  \item \textbf{Launcher-Android}: Patientennahe Bereitstellung und Start der zugewiesenen Spiele.
-  \item \textbf{Test-APK-App}: Simulierte Übermittlung von Spielsitzungen und Scores.
+  \item \textbf{Administration:} Spiele, Metadaten und Zuordnungen werden zentral verwaltet.
+  \item \textbf{Therapeutischer Kontext:} Relevante Spiele können bestimmten Patientinnen und Patienten zugewiesen und fachlich begleitet werden.
+  \item \textbf{Patientenseite:} Zugewiesene Spiele werden auf dem Zielgerät bereitgestellt und gestartet.
+  \item \textbf{Auswertung:} Spielsessions, Scores und weitere Metadaten werden zurück an die Plattform übermittelt und sichtbar gemacht.
 \end{itemize}
 
-Die zentrale Herausforderung bestand darin, diese Komponenten funktional enger zu verzahnen, insbesondere für mobile Anwendungsfälle. Darüber hinaus sollten manuelle Zwischenschritte reduziert und Abläufe stärker automatisiert werden (z.\,B. Zuordnung und Sichtbarkeit neuer Spiele).
+Die Plattform ist damit nicht nur eine Sammlung einzelner Apps, sondern eine durchgängige Infrastruktur für den Lebenszyklus eines Serious Games: von der technischen Einbindung über die Zuordnung bis zur Nutzung und Ergebnisdarstellung.
 
-\section{Monatliche Tätigkeitsdokumentation}
+\subsection{Architektonische Einordnung}
+Die betrachtete Lösung besteht aus mehreren Komponenten, die zusammenarbeiten:
 
-\subsection{Monat 1: Einarbeitung, Architekturverständnis und Setup}
-Im ersten Monat stand die strukturierte Einarbeitung im Vordergrund. Ich habe die bestehenden Repositories analysiert, den lokalen Entwicklungsstack aufgesetzt und den Datenfluss zwischen Backend, Webapp und Launcher nachvollzogen.
-
-Zentrale Aktivitäten in dieser Phase:
 \begin{itemize}[leftmargin=1.5em]
-  \item Repository-Struktur, Branching-Strategie und Build-Prozess dokumentiert.
-  \item Rollenmodell (Admin/Medical/Patient) fachlich und technisch verifiziert.
-  \item Erste End-to-End-Tests mit vorhandenen Spielpaketen durchgeführt.
-  \item Risiken identifiziert: uneinheitliche Metadatenpflege bei APKs, teilweise manuelle Zuordnungsprozesse.
+  \item \textbf{Backend:} Verantwortlich für Persistenz, Rollenlogik, Upload-Prozesse, Zuweisungen und Session-Daten.
+  \item \textbf{Webanwendung:} Oberfläche für Admin- und Verwaltungsprozesse, insbesondere für das Hinzufügen und Verwalten von Spielen.
+  \item \textbf{Android-Launcher:} Mobile Anwendung zur Anzeige und zum Start zugewiesener Android-Spiele.
+  \item \textbf{Test-App:} Technische Hilfsanwendung zur Überprüfung von Session-Übertragung, Score-Rückgabe und Integrationspfaden.
 \end{itemize}
 
-Ergebnis: ein belastbares Verständnis der Kernprozesse und eine priorisierte Liste technischer Verbesserungen.
+Gerade die Kombination dieser Bausteine macht das Projekt relevant. Die Plattform verbindet fachliche Anforderungen aus dem Gesundheitsumfeld mit Full-Stack-Entwicklung, mobilen Bereitstellungsprozessen und einer nachvollziehbaren Datenerfassung.
 
-\subsection{Monat 2: API-Arbeit und Datenmodell-Stabilisierung}
-Im zweiten Monat wurden zentrale API-Flüsse überprüft und verbessert. Schwerpunkt war die robuste Verarbeitung von Spiel-Metadaten sowie die sichere Speicherung von Upload-Artefakten.
+\section{Aussage des Projekts}
+Inhaltlich zeigt das Projekt, dass Serious Games im Gesundheitskontext nur dann sinnvoll skalierbar sind, wenn sie nicht isoliert als Einzelanwendungen betrachtet werden. Entscheidend ist eine Plattformlogik, die mehrere Anforderungen gleichzeitig erfüllt:
 
-Wesentliche Beiträge:
 \begin{itemize}[leftmargin=1.5em]
-  \item Refactoring ausgewählter Service-Methoden im Serious-Game-Bereich.
-  \item Vereinheitlichung von Validierungsregeln für Bild- und Game-Dateien.
-  \item Überarbeitung von Fehlerpfaden (NotFound/Validation/ServiceException).
-  \item Testweise Integration zusätzlicher APK-Pakete in den Plattformfluss.
+  \item Spiele müssen technisch sauber eingebunden und verwaltet werden können.
+  \item Die Bereitstellung auf mobilen Geräten darf nicht von fehleranfälligen manuellen Einzelschritten abhängen.
+  \item Ergebnisse aus den Spielen müssen strukturiert erfasst und den relevanten Rollen wieder sichtbar gemacht werden.
+  \item Die Gesamtarchitektur muss erweiterbar bleiben, damit weitere Spiele und weitere Gerätetypen angebunden werden können.
 \end{itemize}
 
-Neben technischer Umsetzung wurden außerdem die Auswirkungen auf bestehende Datenbestände bewertet, damit Updates reproduzierbar bleiben.
+Die zentrale Aussage des Projekts lautet daher: \textbf{Eine Serious-Game-Plattform entfaltet ihren praktischen Nutzen erst durch die verlässliche Verbindung von Verwaltung, Auslieferung, Nutzung und Auswertung.} Genau an dieser Schnittstelle setzt die Weiterentwicklung an.
 
-\subsection{Monat 3: Mobile Fokusphase -- APK-Handling und Zuordnungslogik}
-Der dritte Monat war geprägt von mobilen Erweiterungen. Hier lag der Schwerpunkt auf einem praxisnahen Workflow: Upload durch Admin, automatische Erkennung relevanter Eigenschaften und direkte Verfügbarkeit für den gewünschten Patientenkontext.
+\section{Aktueller Stand des Projekts}
+Zum aktuellen Stand liegt eine Plattform vor, deren Kernbausteine funktional miteinander verbunden sind. Besonders relevant ist dabei die inzwischen deutlich bessere Verzahnung zwischen Upload-Prozess, mobiler Bereitstellung und Anzeige von Spielergebnissen.
 
-Umgesetzte Teilziele:
+Der derzeitige Stand lässt sich wie folgt zusammenfassen:
+
 \begin{itemize}[leftmargin=1.5em]
-  \item Erweiterung des Upload-Flows um patientenbezogenen Kontext (optionale Zuordnung).
-  \item APK-spezifische Ableitung von \textit{package type} und \textit{device type}.
-  \item Best-Effort-Extraktion von Paket-/App-Informationen zur Reduzierung manueller Eingaben.
-  \item Automatisches Assigning bei mobilen APKs für schnellere Bereitstellung im Launcher.
+  \item Es existiert eine zentrale Struktur zur Verwaltung von Serious Games und zugehörigen Metadaten.
+  \item Mobile Spiele können in den Plattformkontext integriert werden, insbesondere über APK-basierte Prozesse.
+  \item Der Android-Launcher bildet die patientennahe Ausführungsebene für mobile Spiele.
+  \item Sessions und Scores können an die Plattform zurückgegeben und in der Oberfläche sichtbar gemacht werden.
+  \item Für Integrations- und Funktionsprüfungen steht eine Test-App als technisches Hilfsmittel zur Verfügung.
 \end{itemize}
 
-Diese Phase war entscheidend, um aus einem eher statischen Prozess einen deutlich dynamischeren Auslieferungsablauf zu machen.
+Aus Projektsicht ist die Plattform damit nicht mehr nur im Stadium einzelner Prototypen, sondern besitzt bereits einen zusammenhängenden End-to-End-Charakter. Gleichzeitig bleibt sie in mehreren Bereichen ausbaufähig, etwa bei der weiteren Automatisierung, einer noch robusteren Metadatenanalyse und umfassenderen Testabdeckung.
 
-\subsection{Monat 4: Frontend-Erweiterung und Sichtbarkeit von Spielsessions}
-Im vierten Monat stand die Nutzerperspektive im Fokus. Während technische Erfassung bereits möglich war, musste die Sichtbarkeit von Ergebnissen in der Patientenansicht verbessert werden.
+\section{Mein Beitrag innerhalb von vier Monaten}
+\subsection{Monat 1: Einarbeitung und Systemverständnis}
+Im ersten Monat lag der Schwerpunkt auf dem Verständnis der bestehenden Plattform. Dafür wurden die vorhandenen Komponenten, ihre Verantwortlichkeiten und ihre Schnittstellen zueinander analysiert. Ziel war es, die Plattform nicht nur auf Dateiebene zu verstehen, sondern den tatsächlichen fachlichen Ablauf von Spielverwaltung, Zuweisung und Nutzung nachzuvollziehen.
 
-Konkret umgesetzt:
+Schwerpunkte dieser Phase:
 \begin{itemize}[leftmargin=1.5em]
-  \item Erweiterung des Patient-Dashboards um Score-/Highscore-Bereiche.
-  \item Integration bestehender Game-Session-Endpunkte in die UI.
-  \item Darstellung von Session-Metadaten (Spielname, Typ, Dauer, Punkte).
-  \item Konsistente Fehlerkommunikation und leere Zustände (\textit{empty states}).
+  \item Analyse der Architektur aus Backend, Webanwendung, Android-Komponenten und Testpfaden.
+  \item Nachvollzug des Datenflusses zwischen Upload, Assignment, Session-Übertragung und Anzeige.
+  \item Identifikation manueller und potenziell fehleranfälliger Schritte im mobilen Bereitstellungsprozess.
+  \item Aufbau einer belastbaren Grundlage für spätere Änderungen über mehrere Systemteile hinweg.
 \end{itemize}
 
-Damit können auch mobile Spiele, die via Session-API Daten senden, aus Patientensicht nachvollziehbar angezeigt werden.
+\subsection{Monat 2: Backend- und Integrationslogik}
+Im zweiten Monat stand die technische Weiterentwicklung der Integrationslogik im Vordergrund. Dabei ging es vor allem um Abläufe, die mobile Spiele in den Plattformkontext einbinden und deren Daten später wieder verarbeitbar machen.
 
-\subsection{Monat 5: Qualitätssicherung, Regressionsprüfung und Teamabstimmung}
-Im fünften Monat lag der Schwerpunkt auf Stabilität und Abstimmung. Neue Features wurden gegen bestehende Workflows getestet, um Seiteneffekte zu vermeiden.
-
-Arbeitspakete:
+Wesentliche Tätigkeiten:
 \begin{itemize}[leftmargin=1.5em]
-  \item Regressionschecks der Kernrouten (Upload, Assignment, Session-Submission).
-  \item Prüfung von Rollenzugriffen und Berechtigungsgrenzen.
-  \item Abgleich mit Stakeholder-Erwartungen (Admin-/Therapeutenperspektive).
-  \item Dokumentation offener Punkte für spätere Ausbaustufen.
+  \item Überprüfung und Stabilisierung von API-nahen Abläufen im Serious-Game-Bereich.
+  \item Vereinheitlichung von Validierungs- und Fehlerpfaden für relevante Artefakte.
+  \item Verbesserung der Nachvollziehbarkeit im Umgang mit Spiel-Metadaten.
+  \item Vorbereitung robusterer Integrationspfade für APK-basierte Spiele.
 \end{itemize}
 
-Die wichtigste Erkenntnis war, dass funktionsübergreifende Änderungen (Backend \& Frontend) nur mit eng getakteter Kommunikation nachhaltig umgesetzt werden können.
+In dieser Phase war besonders wichtig, technische Änderungen so anzulegen, dass sie nicht nur lokal funktionieren, sondern in den bestehenden Plattformfluss passen.
 
-\subsection{Monat 6: Abschluss, Dokumentation und Übergabe}
-Der letzte Monat diente der Konsolidierung. Ziel war ein nachvollziehbarer Zustand, der von weiteren Teammitgliedern effizient übernommen und erweitert werden kann.
+\subsection{Monat 3: Mobile Bereitstellung und Android-Launcher-Kontext}
+Im dritten Monat verlagerte sich der Fokus auf die mobile Seite des Projekts. Ziel war es, den Weg von einem eingebundenen mobilen Spiel bis zur sichtbaren Verfügbarkeit im Android-Launcher konsistenter und praxisnäher zu gestalten.
 
-Abschlussaktivitäten:
+Dabei standen folgende Punkte im Mittelpunkt:
 \begin{itemize}[leftmargin=1.5em]
-  \item Technische Änderungen finalisiert und in Branch-Workflow überführt.
-  \item Funktionsumfang, Einschränkungen und Testhinweise dokumentiert.
-  \item Offene Architekturideen für Folgeiteration strukturiert erfasst.
-  \item Praktikumsbericht erstellt und übergabefähig aufbereitet.
+  \item Verbesserung des Upload- und Zuordnungsflusses für mobile Spielpakete.
+  \item Berücksichtigung von APK-spezifischen Eigenschaften innerhalb des Plattformmodells.
+  \item Reduktion manueller Zwischenschritte bei der Bereitstellung im Launcher-Kontext.
+  \item Bessere Grundlage für eine direkte Nutzung neuer mobiler Spiele auf dem Zielgerät.
 \end{itemize}
+
+Diese Phase war für den Projektcharakter besonders wichtig, weil hier sichtbar wurde, wie stark technische Infrastruktur und tatsächliche Nutzbarkeit zusammenhängen.
+
+\subsection{Monat 4: Sichtbarkeit von Sessions, Scores und Testpfaden}
+Im vierten Monat lag der Schwerpunkt auf der Frage, wie Ergebnisse aus Serious Games nicht nur technisch empfangen, sondern auch sinnvoll sichtbar gemacht werden können. Gleichzeitig wurden Testpfade genutzt, um die Integrationskette zwischen Spiel, Launcher, Test-App und Plattform besser nachvollziehen zu können.
+
+Umgesetzt beziehungsweise vertieft wurden dabei:
+\begin{itemize}[leftmargin=1.5em]
+  \item Sichtbarmachung von Session-Daten in der Benutzeroberfläche.
+  \item Einbindung beziehungsweise Nutzung von Score- und Highscore-Informationen.
+  \item Verbesserung der Nachvollziehbarkeit von Session-Metadaten.
+  \item Nutzung einer Test-App zur Validierung des technischen End-to-End-Verhaltens.
+\end{itemize}
+
+Damit wurde die Plattform nicht nur um technische Funktionen ergänzt, sondern auch in ihrer Beobachtbarkeit verbessert. Gerade im Gesundheitskontext ist diese Transparenz wichtig, weil die fachliche Aussage eines Spiels wesentlich von den zurückgelieferten Ergebnissen abhängt.
 
 \section{Fachliche und technische Ergebnisse}
-Aus dem Praktikum sind mehrere konkrete Verbesserungen hervorgegangen:
+Aus dem viermonatigen Projektzeitraum lassen sich mehrere konkrete Ergebnisse ableiten:
 
 \begin{enumerate}[leftmargin=1.5em]
-  \item \textbf{Admin-zentrierter Upload-Flow:} Der relevante Rollenfluss ist klar definiert.
-  \item \textbf{Mobile APK-Automatisierung:} Metadatenableitung und patientenbezogene Bereitstellung sind verbessert.
-  \item \textbf{Sichtbarkeit von Scores:} Mobile und klassische Sessiondaten werden für Patientinnen und Patienten transparenter.
-  \item \textbf{Wartbare Weiterentwicklung:} Die Änderungen sind modular genug, um zukünftige Spieltypen zu integrieren.
+  \item \textbf{Klarerer Projektzusammenhang:} Die Plattform wurde als zusammenhängendes System aus Verwaltung, mobiler Bereitstellung und Auswertung weiter geschärft.
+  \item \textbf{Verbesserte mobile Einbindung:} APK-bezogene Abläufe wurden stärker in den Plattformprozess integriert.
+  \item \textbf{Bessere Sichtbarkeit von Ergebnissen:} Sessions und Scores sind für die Plattformnutzung relevanter und nachvollziehbarer geworden.
+  \item \textbf{Unterstützung durch Testpfade:} Mit der Test-App kann das Zusammenspiel der Komponenten besser überprüft werden.
+  \item \textbf{Stärkere Erweiterbarkeit:} Die Plattform wurde in eine Richtung weiterentwickelt, in der zusätzliche Spiele und mobile Szenarien einfacher anschließbar sind.
 \end{enumerate}
 
-\section{Herausforderungen und Lessons Learned}
-Im Projektverlauf traten typische Herausforderungen auf, die für Full-Stack-Praktika charakteristisch sind:
+\section{Herausforderungen}
+\subsection*{Systemgrenzen und Schnittstellen}
+Die größte technische Herausforderung bestand darin, Änderungen nicht isoliert zu betrachten. Schon kleine Anpassungen an Datenmodellen oder Integrationslogik wirken sich auf Backend, Weboberfläche, Launcher und Testpfade aus.
 
-\subsection*{Heterogene Komponenten}
-Die Kopplung von Backend, Webapp und mobilem Launcher verlangt disziplinierte Schnittstellenarbeit. Schon kleine Datenmodelländerungen wirken sich auf mehrere Schichten aus.
+\subsection*{Mobile Bereitstellung}
+Die Einbindung von Android-Spielen ist anspruchsvoller als ein reiner Upload-Prozess. Relevante Metadaten, Zuweisungen und die tatsächliche Sichtbarkeit im Launcher müssen zusammenpassen, damit aus einem Artefakt auch wirklich ein nutzbares Spiel wird.
 
-\subsection*{Rollen und Berechtigungen}
-Fachlich plausible Prozesse müssen nicht immer deckungsgleich mit bestehender Rollenlogik sein. Es war wichtig, funktionale Anforderungen früh gegen Security-Regeln abzugleichen.
-
-\subsection*{Datenqualität und Automatisierung}
-Automatische Metadatenextraktion reduziert manuelle Eingaben, erfordert aber robuste Fallback-Strategien bei unvollständigen oder uneinheitlichen Artefakten.
-
-\subsection*{Produktive Kommunikation}
-Kurze, präzise Abstimmungen mit klaren Abnahmekriterien waren entscheidend, um Iterationen schnell und zielgerichtet abzuschließen.
+\subsection*{Nachvollziehbarkeit von Ergebnissen}
+Session- und Score-Daten sind nur dann fachlich wertvoll, wenn sie konsistent übertragen, gespeichert und angezeigt werden. Dadurch entsteht zusätzlicher Abstimmungsbedarf zwischen technischen Schichten.
 
 \section{Fazit und Ausblick}
-Das Praktikum hat gezeigt, dass Serious-Game-Plattformen im Gesundheitskontext sowohl technisch als auch organisatorisch anspruchsvoll sind. Besonders wertvoll war die Verbindung aus praxisnaher Umsetzung und systematischer Qualitätsarbeit.
+Der aktuelle Projektstand zeigt, dass die Serious-Game-Plattform eine belastbare Grundlage für die Verwaltung, Bereitstellung und Auswertung digitaler Therapie- und Trainingsspiele bietet. Besonders relevant ist die stärkere Verbindung zwischen administrativen Prozessen, mobiler Nutzung über den Android-Launcher und der Rückführung von Session-Daten in die Plattform.
 
-Die erreichten Verbesserungen stärken den operativen Einsatz der Plattform: Neue mobile Spiele können zielgerichteter eingebunden, Patientenzuordnungen vereinfacht und Ergebnisse besser sichtbar gemacht werden. Für die nächste Ausbaustufe sind unter anderem folgende Themen sinnvoll:
+Innerhalb von vier Monaten lag mein Beitrag vor allem in der Analyse und Weiterentwicklung genau dieser Integrationspunkte. Dadurch wurde die Plattform in einem Bereich gestärkt, der für ihren praktischen Nutzen entscheidend ist: dem Übergang von einem verwalteten Spielobjekt zu einem tatsächlich nutzbaren und auswertbaren Serious Game.
 
+Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{itemize}[leftmargin=1.5em]
-  \item verlässlichere APK-Metadatenanalyse (z.\,B. Manifest-Parser mit höherer Genauigkeit),
-  \item erweiterte Analytics-Ansichten (Trendlinien, Verlauf pro Spieltyp),
-  \item automatisierte Integrations- und End-to-End-Tests,
-  \item bessere Deployment-Validierung für unterschiedliche Laufzeitumgebungen.
+  \item robustere und stärker automatisierte Metadatenanalyse für mobile Spielpakete,
+  \item erweiterte Auswertungsansichten für Sessions und Scores,
+  \item zusätzliche Integrations- und End-to-End-Tests,
+  \item klarere Deployment- und Betriebsprozesse für mobile Spiele im Plattformkontext.
 \end{itemize}
 
-Insgesamt war das Praktikum fachlich sehr lehrreich und hat meine Kompetenzen in API-Design, Frontend-Integration, Fehleranalyse und teamorientierter Produktentwicklung deutlich vertieft.
-
 \section{Platzhalter für Screenshots}
-Die folgenden Seiten dienen als Platzhalter für spätere visuelle Ergänzungen.
+Die folgenden Abschnitte dienen als Platzhalter für spätere visuelle Ergänzungen im Projektbericht.
 
-\subsection*{Screenshot 1 -- Admin Upload-Ansicht}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Screenshot Admin Upload (Serious Games)}}
+\subsection*{Screenshot 1 -- Launcher Startansicht}
+\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Android-Launcher Startansicht}}
 
-\subsection*{Screenshot 2 -- Patientenzuordnung}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Screenshot automatische Zuordnung / Patient-Kontext}}
+\subsection*{Screenshot 2 -- Launcher Spieleübersicht}
+\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Launcher mit zugewiesenen Spielen}}
 
-\subsection*{Screenshot 3 -- Patient Dashboard Scores}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Screenshot Scores inkl. Mobile Games}}
+\subsection*{Screenshot 3 -- Launcher Detail- oder Auswahlansicht}
+\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Launcher-View mit Spielauswahl oder Detailansicht}}
 
-\subsection*{Screenshot 4 -- Launcher-Ansicht}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Screenshot Launcher mit neuem Mobile Game}}
+\subsection*{Screenshot 4 -- Webansicht für Spielverwaltung}
+\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Webansicht für Serious-Game-Verwaltung oder Upload}}
 
-\subsection*{Screenshot 5 -- API/Session-Flow}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Screenshot API-Request/Response für Game Sessions}}
+\subsection*{Screenshot 5 -- Session- und Score-Ansicht}
+\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Anzeige von Sessions, Scores oder Highscores}}
+
+\subsection*{Screenshot 6 -- Test-App Startansicht}
+\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Test-App Startansicht}}
+
+\subsection*{Screenshot 7 -- Test-App Session-Übertragung}
+\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Test-App bei Session- oder Score-Submission}}
 
 \newpage
 \appendix
-\section{Anhang: README-Auszug}
-\subsection*{Projekt README (Kurzfassung)}
-\begin{verbatim}
-# seriousgame_bericht
+\section{Anhang: README-Hinweis zum Android-Launcher}
+Der Android-Launcher ist innerhalb der Plattform die mobile Ausführungsebene für zugewiesene Spiele. Aus Projektsicht erfüllt er damit nicht nur die Funktion einer Startoberfläche, sondern bildet die Verbindung zwischen zentral verwaltetem Spielbestand und tatsächlicher Nutzung auf dem Endgerät.
 
-Praktikumsbericht zur Entwicklung einer Serious-Game-Plattform
-(Backend, Webapp, Launcher, Mobile-APK-Integration).
+Die Beschreibung des Launchers lässt sich für den Bericht wie folgt zusammenfassen:
+\begin{itemize}[leftmargin=1.5em]
+  \item Der Launcher stellt die auf dem Gerät verfügbaren beziehungsweise zugewiesenen Android-Spiele in einer nutzbaren Oberfläche dar.
+  \item Er dient als patientennahe Einstiegskomponente und reduziert den Aufwand, einzelne Spiele manuell zu suchen oder getrennt zu starten.
+  \item Neue oder aktualisierte mobile Spiele werden nicht isoliert betrachtet, sondern in einen Plattformprozess aus Verwaltung, Zuweisung und Nutzung eingebettet.
+  \item Für den Projektkontext ist der Launcher deshalb ein zentrales Bindeglied zwischen Web-/Backend-Verwaltung und realem Einsatz des Serious Games auf Android.
+\end{itemize}
 
-## Inhalt
-- Einleitung und Stand der Technik
-- Zielsetzung des Praktikums
-- Monatliche Tätigkeiten
-- Ergebnisse, Lessons Learned, Ausblick
-- Screenshot-Platzhalter
+\subsection*{Einordnung für den Projektbericht}
+Für diesen Bericht ist der Android-Launcher vor allem deshalb relevant, weil an ihm sichtbar wird, ob die Plattform ihr Ziel tatsächlich erreicht. Erst wenn ein Spiel nach Upload, Zuordnung und technischer Integration im Launcher erscheint und dort gestartet werden kann, wird aus einer Verwaltungsfunktion ein praktisch nutzbarer Therapie- oder Trainingsbaustein.
 
-## Overleaf
-Dieses Projekt ist Overleaf-kompatibel.
-Hauptdatei: main.tex
-
-## Build (lokal)
-pdflatex main.tex
-\end{verbatim}
+\subsection*{Optionaler Originalauszug aus der README}
+\fbox{\parbox[c][6cm][c]{\textwidth}{\centering Platzhalter: Hier kann bei Bedarf der konkrete README-Auszug zum Android-Launcher eingefügt werden.}}
 
 \end{document}
