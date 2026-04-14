@@ -1,0 +1,674 @@
+\providecommand{\tightlist}{}
+
+\subsubsection{Overview}
+
+The Healthub Android Launcher is a patient-facing app that manages
+serious game downloads, installation, and score tracking for rehab
+patients. It acts as the bridge between the Healthub backend and
+third-party APK games.
+
+\subsection{Architecture}\label{architecture}
+
+\begin{verbatim}
++------------------+      +----------------------+      +--------------+
+| Healthub App     |<---->| Healthub Backend     |<---->| Database     |
+| (Launcher)       | REST | (Spring Boot)        |      |              |
++------------------+      +----------------------+      +--------------+
+\end{verbatim}
+
+\subsection{API Endpoints}\label{api-endpoints}
+
+\subsubsection{Authentication}\label{authentication}
+
+\begin{longtable}{p{0.22\linewidth}p{0.30\linewidth}p{0.40\linewidth}}
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Endpoint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{POST} & \texttt{auth/login} & Login with username/password,
+returns JWT token \\
+\texttt{GET} & \texttt{me} & Get current authenticated user (patient
+profile) \\
+\end{longtable}
+
+\subsubsection{Serious Games}\label{serious-games}
+
+\begin{longtable}{p{0.12\linewidth}p{0.50\linewidth}p{0.30\linewidth}}
+\toprule
+Method & Endpoint & Description \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+GET &
+\parbox[t]{\linewidth}{
+\texttt{patients/\{id\}/serious-games?hasGames=true}\\
+\texttt{\&deviceType=mobile\&packageType=apk}
+}
+&
+Get games assigned to a patient (filtered for mobile APKs) \\
+GET &
+\parbox[t]{\linewidth}{\texttt{serious-games/\{id\}/game}}
+&
+Download the APK file (streaming, binary) \\
+GET &
+\parbox[t]{\linewidth}{\texttt{serious-games/\{id\}\\
+\texttt{\/thumbnail?asResource=true}}}
+&
+Download game thumbnail image \\
+\end{longtable}
+
+\subsubsection{Game Sessions \& Stats}\label{game-sessions-stats}
+
+\begin{longtable}{p{0.12\linewidth}p{0.50\linewidth}p{0.30\linewidth}}
+\toprule
+Method & Endpoint & Description \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+POST &
+\parbox[t]{\linewidth}{\texttt{patients/\{patientId\}/game-sessions}}
+&
+Submit a new game session (score, duration, data) \\
+GET &
+\parbox[t]{\linewidth}{\texttt{patients/\{patientId\}/game-sessions}}
+&
+Get all sessions for a patient \\
+GET &
+\parbox[t]{\linewidth}{\texttt{patients/\{patientId\}\\
+\texttt{\/game-sessions/highscores}}}
+&
+Get highscores for a patient \\
+GET &
+\parbox[t]{\linewidth}{
+\texttt{patients/\{patientId\}/game-sessions/}\\
+\texttt{by-type/\{gameType\}}
+}
+&
+Get sessions filtered by game type \\
+\end{longtable}
+
+\subsubsection{Backend DTOs}\label{backend-dtos}
+
+\paragraph{\texttt{SeriousGameDto} (incoming)}\label{seriousgamedto-incoming}
+
+\begin{lstlisting}
+{
+  "id": 1,
+  "name": "Labyrinth",
+  "description": "Memory training game",
+  "internalNotes": "For rehab patients",
+  "createdAt": "2026-03-25T10:00:00Z",
+  "gameDeviceType": "mobile",
+  "gamePackageType": "apk",
+  "gameConfigType": "standard",
+  "gameStatsType": "score",
+  "gameType": "rehab_labyrinth"
+}
+\end{lstlisting}
+
+\paragraph{\texttt{GameSessionDto} (outgoing -- score submission)}\label{gamesessiondto-outgoing-score-submission}
+
+\begin{lstlisting}
+{
+  "gameType": "rehab_labyrinth",
+  "gameName": "Labyrinth",
+  "score": 85.5,
+  "durationSeconds": 120,
+  "sessionData": "{\"level\":3,\"errors\":2}",
+  "startedAt": "2026-03-25T10:00:00Z",
+  "endedAt": "2026-03-25T10:02:00Z"
+}
+\end{lstlisting}
+
+\subsection{Intent Protocol (APK
+Integration)}\label{intent-protocol-apk-integration}
+
+\subsubsection{Overview}\label{overview-1}
+
+The Launcher is the \textbf{middleman} between the API and the APK. It:
+1. Fetches data from the API (\texttt{SeriousGameDto}) 2. Packs that
+data into an Android \texttt{Intent} 3. Starts the APK with that Intent
+4. Listens for a broadcast result when the APK finishes
+
+\begin{verbatim}
++------------------+      +----------------------+      +--------------+
+| Healthub App     |<---->| Healthub Backend     |<---->| Database     |
+| (Launcher)       | REST | (Spring Boot)        |      |              |
++------------------+      +----------------------+      +--------------+
+\end{verbatim}
+
+\subsubsection{Where do the Intent values come
+from?}\label{where-do-the-intent-values-come-from}
+
+\textbf{All values come from the API}, not from the launcher itself. The
+launcher is just a ``mailman'':
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Intent Extra & Source & Example Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{patientId} & Logged-in user (\texttt{GET\ /me}) & \texttt{42} \\
+\texttt{gameName} & \texttt{SeriousGameDto.name} &
+\texttt{"Labyrinth"} \\
+\texttt{gameType} & \texttt{SeriousGameDto.gameType} &
+\texttt{"rehab\_labyrinth"} \\
+\texttt{configType} & \texttt{SeriousGameDto.gameConfigType} &
+\texttt{"standard"} \\
+\texttt{statsType} & \texttt{SeriousGameDto.gameStatsType} &
+\texttt{"score"} \\
+\texttt{deviceType} & \texttt{SeriousGameDto.gameDeviceType} &
+\texttt{"mobile"} \\
+\end{longtable}
+
+\textbf{The launcher does NOT decide or generate any of these values.}
+It fetches them from the API and passes them through.
+
+\subsubsection{How APKs are launched}\label{how-apks-are-launched}
+
+The launcher calls \texttt{launchGame()} which fetches API data and
+starts the APK:
+
+\begin{lstlisting}
+fun launchGame(game: SeriousGameDto, patientId: Long) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(fileUri, "application/vnd.android.package-archive")
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+
+        putExtra("patientId", patientId)
+        putExtra("gameName", game.name)
+        putExtra("gameType", game.gameType)
+        putExtra("configType", game.gameConfigType)
+        putExtra("statsType", game.gameStatsType)
+        putExtra("deviceType", game.gameDeviceType)
+    }
+    context.startActivity(intent)
+}
+\end{lstlisting}
+
+\subsubsection{How APKs receive the
+data}\label{how-apks-receive-the-data}
+
+Inside the APK's \texttt{Activity}, read the extras from the launching
+Intent:
+
+\begin{lstlisting}
+class GameActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val patientId = intent.getLongExtra("patientId", -1)
+        val gameName = intent.getStringExtra("gameName")
+        val gameType = intent.getStringExtra("gameType")
+        val configType = intent.getStringExtra("configType")
+        val statsType = intent.getStringExtra("statsType")
+        val deviceType = intent.getStringExtra("deviceType")
+
+        Log.d(
+            "HealthubGame",
+            "Playing: $gameName (type=$gameType, patient=$patientId)"
+        )
+    }
+}
+\end{lstlisting}
+
+\subsubsection{How APKs send scores
+back}\label{how-apks-send-scores-back}
+
+After the game ends, the APK broadcasts a result Intent. The launcher's
+\texttt{BroadcastReceiver} picks it up and submits it to the API:
+
+\begin{lstlisting}
+val result = Intent("com.healthub.GAME_RESULT").apply {
+    setPackage("com.healthub.launcher")
+    putExtra("gameType", gameType)
+    putExtra("gameName", gameName)
+    putExtra("score", 85.5)
+    putExtra("durationSeconds", 120L)
+    putExtra("sessionData", "{\"level\":3}")
+}
+sendBroadcast(result)
+\end{lstlisting}
+
+\subsubsection{Intent Action Constants}\label{intent-action-constants}
+
+\begin{longtable}{p{0.28\linewidth}p{0.18\linewidth}p{0.20\linewidth}p{0.26\linewidth}}
+\toprule
+Constant & Value & Direction & Purpose \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\texttt{com.healthub.LAUNCH\_GAME} & Action to launch an APK & Launcher to APK & Start the game with config \\
+\texttt{com.healthub.GAME\_RESULT} & Action for score results & APK to Launcher & Send score/session back \\
+\end{longtable}
+
+\subsubsection{Required fields in the result Intent (APK to Launcher)}\label{required-fields-in-the-result-intent-apk-launcher}
+
+\begin{longtable}{p{0.20\linewidth}p{0.16\linewidth}p{0.18\linewidth}p{0.36\linewidth}}
+\toprule
+Field & Type & Required & Description \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\texttt{gameType} & \texttt{String} & Yes & Must match the \texttt{gameType} from the backend \\
+\texttt{score} & \texttt{Double} & Optional & Numeric score \\
+\texttt{durationSeconds} & \texttt{Long} & Optional & Game duration in seconds \\
+\texttt{sessionData} & \texttt{String} & Optional & Arbitrary JSON string for extra data \\
+\end{longtable}
+
+\subsubsection{How the launcher processes the
+result}\label{how-the-launcher-processes-the-result}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Receives the broadcast Intent with action
+  \texttt{com.healthub.GAME\_RESULT}
+\item
+  Extracts \texttt{gameType}, \texttt{score}, \texttt{durationSeconds},
+  \texttt{sessionData}
+\item
+  Finds the logged-in patient ID
+\item
+  Calls \texttt{submitGameSession(patientId,\ session)} to
+\texttt{POST\ /patients/\{id\}/game-sessions}
+\item
+  Backend stores the session linked to the patient
+\end{enumerate}
+
+\subsubsection{Intent Extra Reference
+(Launch)}\label{intent-extra-reference-launch}
+
+The launcher sends these extras when starting an APK:
+
+\begin{longtable}{p{0.28\linewidth}p{0.16\linewidth}p{0.28\linewidth}p{0.16\linewidth}}
+\toprule
+Extra Key & Type & Source & Required \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\texttt{patientId} & \texttt{Long} & API (\texttt{/me}) & Yes \\
+\texttt{gameName} & \texttt{String} & API (\texttt{SeriousGameDto.name}) & Yes \\
+\texttt{gameType} & \texttt{String} & API (\texttt{SeriousGameDto.gameType}) & Yes \\
+\texttt{configType} & \texttt{String} & API (\texttt{SeriousGameDto.gameConfigType}) & Optional \\
+\texttt{statsType} & \texttt{String} & API (\texttt{SeriousGameDto.gameStatsType}) & Optional \\
+\texttt{deviceType} & \texttt{String} & API (\texttt{SeriousGameDto.gameDeviceType}) & Optional \\
+\end{longtable}
+
+\subsubsection{Test App}\label{test-app}
+
+See the \texttt{apk-test-app/} folder for a working example that demonstrates the full Intent workflow:
+
+\begin{itemize}
+\item Receives launch Intent from the launcher
+\item Displays received values on screen
+\item Has a button to send a test highscore back to the launcher
+\item Can be used as a template for real game APKs
+\end{itemize}
+\subsection{Package Filtering}\label{package-filtering}
+
+The backend supports filtering by:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\texttt{deviceType}}: \texttt{mobile} --- only show mobile
+  games
+\item
+  \textbf{\texttt{packageType}}: \texttt{apk} --- only show APK packages
+  (vs HTML5, etc.)
+\end{itemize}
+
+Example:
+\texttt{GET\ patients/42/serious-games?deviceType=mobile\&packageType=apk}
+
+\subsection{Data Flow Summary}\label{data-flow-summary}
+
+\begin{verbatim}
+1. Login -> POST /auth/login -> JWT
+2. Load games -> GET /patients/{id}/serious-games (filtered)
+3. Download APK -> GET /serious-games/{id}/game
+4. Install APK -> Android PackageInstaller
+5. Launch APK -> Intent with gameName + config
+6. User plays game...
+7. APK sends result -> Intent broadcast (score, duration, data)
+8. Launcher receives Intent -> POST /patients/{id}/game-sessions
+9. View scores -> GET /patients/{id}/game-sessions/highscores
+\end{verbatim}
+
+\subsection{Setup}\label{setup}
+
+\begin{lstlisting}
+# Build
+cd launcher-android
+./gradlew assembleDebug
+
+# Install on device
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+\end{lstlisting}
+
+\subsubsection{Requirements}\label{requirements}
+
+\begin{itemize}
+\tightlist
+\item
+  Android SDK 24+ (API level 24)
+\item
+  Retrofit 2 + OkHttp for HTTP
+\item
+  Room DB for local caching
+\item
+  Hilt for DI
+\item
+  Material 3 / Jetpack Compose UI
+\end{itemize}
+
+\subsection{Adding APK Games For The
+Launcher}\label{adding-apk-games-for-the-launcher}
+
+There are now two supported ways to make a new Android APK appear in the
+launcher:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  upload it through the \textbf{web frontend / admin panel}
+\item
+  seed it through \textbf{\texttt{SeriousGameDataGen}}
+\end{enumerate}
+
+In both cases the launcher only shows games that exist as
+\texttt{SeriousGame} entries in the backend and are assigned to the
+logged-in patient.
+
+\subsubsection{Option A: Upload APKs through the admin
+frontend}\label{option-a-upload-apks-through-the-admin-frontend}
+
+This is now the recommended workflow for new APK games.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Open the web frontend and go to
+  \texttt{Admin\ -\textgreater{}\ Serious\ Games}
+\item
+  Fill in the metadata
+\item
+  Upload:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    one APK file
+  \item
+    one thumbnail image
+  \end{itemize}
+\item
+  Save the game
+\end{enumerate}
+
+Current launcher-related behavior after upload:
+
+\begin{itemize}
+\tightlist
+\item
+  the backend stores the upload as a \texttt{SeriousGame}
+\item
+  APK uploads are treated as \texttt{GameDeviceType.MOBILE}
+\item
+  APK uploads are treated as \texttt{GamePackageType.APK}
+\item
+  uploaded APKs are automatically assigned to
+  \texttt{patient0@email.com} if no patient is explicitly selected
+\item
+  the launcher fetches the assigned mobile APKs and shows them for that
+  patient
+\end{itemize}
+
+Important note about package names:
+
+\begin{itemize}
+\tightlist
+\item
+  the backend tries to infer the APK package name during upload
+\item
+  the launcher additionally reads the package name directly from the
+  downloaded APK on-device
+\item
+  this means installed APKs can now still be recognized correctly even
+  if the backend package name was incomplete
+\end{itemize}
+
+\subsubsection{Option B: Seed APKs through \texttt{datagen}}\label{option-b-seed-apks-through-datagen}
+
+If you want the APK to be part of the seed/demo dataset, you can still
+add it in:
+
+\texttt{backend/healthub/src/main/java/at/ac/inso/tuwien/healthub/datagen/SeriousGameDataGen.java}
+
+Important values for Android launcher games:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{GameDeviceType.MOBILE}
+\item
+  \texttt{GamePackageType.APK}
+\item
+  \texttt{packageName} should match the real Android package name inside
+  the APK whenever possible
+\end{itemize}
+
+Example:
+
+\begin{lstlisting}
+thumbnail = ctx.getResource("classpath:static/thumbnails/my-test-game.png");
+game = ctx.getResource("classpath:static/games/my-test-game.apk");
+thumbnailFileName = "my-test-game.png";
+gameFileName = "my-test-game.apk";
+
+seriousGameService.saveSeriousGame(
+    createGameUploadDto(
+        "My Test Game",
+        "Test APK for the Android launcher",
+        "test-apk",
+        GameConfigType.NONE,
+        GameConfigType.NONE,
+        GameConfigType.NONE,
+        GameDeviceType.MOBILE,
+        GamePackageType.APK,
+        "com.example.mytestgame"
+    ),
+    new MockedMultiPartFile(gameFileName, game),
+    new MockedMultiPartFile(thumbnailFileName, thumbnail)
+);
+
+Long myTestGameId = seriousGameRepository
+    .findByName("My Test Game")
+    .orElseThrow()
+    .getId();
+
+defaultGameIds.add(myTestGameId);
+\end{lstlisting}
+
+\subsubsection{When do you need \texttt{datagen} now?}\label{when-do-you-need-datagen-now}
+
+You only need \texttt{datagen} if you want the APK to be recreated
+automatically on startup as part of the seed dataset.
+
+If you upload the APK through the admin frontend, you do \textbf{not}
+need to add it to \texttt{SeriousGameDataGen}.
+
+\subsubsection{Backend restart /
+redeploy}\label{backend-restart-redeploy}
+
+If you changed backend code or \texttt{datagen}, restart the backend
+with the \texttt{datagen} profile. If you only uploaded an APK through
+the admin frontend, no new seed entry is required.
+
+Typical Windows PowerShell flow for backend startup:
+
+\begin{lstlisting}
+cd c:\Users\vuong\StudioProjects\seriousgameplattform\backend\healthub
+docker compose up -d
+$env:JAVA_HOME="C:\Program Files\Java\jdk-21.0.10"
+$env:Path="$env:JAVA_HOME\bin;$env:Path"
+.\mvnw.cmd clean spring-boot:run "-Dmaven.test.skip=true" "-Dspring-boot.run.profiles=datagen" "-Dspring-boot.run.main-class=at.ac.inso.tuwien.healthub.HealthubApplication" "-Dspring-boot.run.jvmArguments=-Dspring.devtools.restart.enabled=false"
+\end{lstlisting}
+
+\subsubsection{Reinstall the launcher
+app}\label{reinstall-the-launcher-app}
+
+After backend or launcher changes, reinstall the launcher:
+
+\begin{lstlisting}
+cd c:\Users\vuong\StudioProjects\seriousgameplattform\launcher-android
+.\gradlew.bat installDebug
+\end{lstlisting}
+
+\subsubsection{Test flow on the phone}\label{test-flow-on-the-phone}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Start the backend.
+\item
+  Open the launcher.
+\item
+  Set the correct server URL.
+\item
+  Log in with a patient that has the APK assigned, for example
+  \texttt{patient0@email.com} / \texttt{password}.
+\item
+  Download the APK from the launcher.
+\item
+  Tap \texttt{Install}.
+\item
+  After Android installs the app, return to the launcher.
+\item
+  The launcher should now show \texttt{Open}.
+\item
+  Tap \texttt{Open} to start the installed APK.
+\item
+  Let the APK send score/session results back via
+  \texttt{com.healthub.GAME\_RESULT}.
+\item
+  The launcher forwards the session to the backend.
+\item
+  The score is then visible both:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  in the Android launcher highscores/session views
+\item
+  in the web frontend statistics/session views
+\end{itemize}
+
+\subsubsection{Intent data passed to the
+APK}\label{intent-data-passed-to-the-apk}
+
+When the launcher opens an installed game, it passes these extras:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{healthub\_patient\_id}
+\item
+  \texttt{healthub\_token}
+\item
+  \texttt{healthub\_game\_type}
+\item
+  \texttt{healthub\_game\_name}
+\item
+  \texttt{healthub\_base\_url}
+\end{itemize}
+
+This allows the APK to send highscores or game sessions directly to the
+backend.
+
+\subsection{End-to-End Frontend Upload
+Flow}\label{end-to-end-frontend-upload-flow}
+
+The full current flow for third-party Android games is:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Upload APK + thumbnail in the \textbf{web admin frontend}
+\item
+  Backend stores the APK as a mobile launcher game
+\item
+  Backend auto-assigns the uploaded APK to \texttt{patient0@email.com}
+  by default
+\item
+  Patient logs into the \textbf{Android launcher}
+\item
+  Launcher fetches assigned \texttt{MOBILE} + \texttt{APK} games from
+  the backend
+\item
+  Patient downloads and installs the APK
+\item
+  Launcher detects installation using backend package name and, if
+  necessary, by reading the package name from the downloaded APK
+\item
+  Patient opens the APK from the launcher
+\item
+  APK sends result broadcasts with score / duration / session JSON
+\item
+  Launcher posts the session to
+  \texttt{POST\ /patients/\{patientId\}/game-sessions}
+\item
+  Backend stores the session and highscores
+\item
+  Sessions and scores can then be viewed in:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    the Android launcher
+  \item
+    the web frontend / patient statistics views
+  \end{itemize}
+\end{enumerate}
+
+\subsection{Project Structure}\label{project-structure}
+
+\begin{verbatim}
+launcher-android/
+|-- app/src/main/java/com/healthub/launcher/
+|   |-- data/
+|   |   |-- local/
+|   |   \-- remote/
+|   |       |-- api/HealthubApi.kt
+|   |       \-- dto/
+|   |-- domain/
+|   |   |-- model/Game.kt
+|   |   \-- repository/
+|   \-- ui/
+|       |-- games/
+|       \-- login/
+\end{verbatim}
