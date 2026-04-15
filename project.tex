@@ -18,9 +18,9 @@
 \dokumenttyp{Projektbericht}
 \assistent{}
 \betreuer{Rene Baranyi}
-\title{Android Launcher für die  Serious-Game-Plattform}
-\shorttitle{Entwicklung eines Android Launcher - Serious-Game-Plattform}
-\subtitle{Projektbericht Android Launcher}
+\title{Android-Launcher für die Serious-Game-Plattform}
+\shorttitle{Entwicklung eines Android-Launchers für die Serious-Game-Plattform}
+\subtitle{Projektbericht Android-Launcher}
 \author{Minh Tuan Vuong}
 \matrikelnr{e12228537}
 \kennzahl{066 936}
@@ -38,7 +38,7 @@
 \section{Problemstellung}
 Digitale Anwendungen gewinnen im Gesundheitskontext zunehmend an Bedeutung. Neben klassischen Web- und Mobile-Anwendungen entstehen immer mehr interaktive Systeme, die Training, Motivation und Verlaufskontrolle miteinander verbinden. In diesem Umfeld nehmen \textbf{Serious Games} eine besondere Rolle ein, weil sie spielerische Elemente mit funktionalen Zielen wie Rehabilitation, Aktivierung, Therapiebegleitung oder strukturierter Datenerfassung verknüpfen.
 
-Das vorliegende Projekt befasst sich mit der Weiterentwicklung einer Serious-Game-Plattform, die mehrere technische Bausteine in einem gemeinsamen System zusammenführt. Dazu gehören ein Backend zur Daten- und Benutzerverwaltung, eine Weboberfläche für administrative und therapeutische Prozesse. Das Ziel ist die Entwicklung eines Android-Launchers zur Bereitstellung mobiler Spiele.
+Das vorliegende Projekt befasst sich mit der Weiterentwicklung einer Serious-Game-Plattform, die mehrere technische Bausteine in einem gemeinsamen System zusammenführt. Dazu gehören ein Backend zur Daten- und Benutzerverwaltung sowie eine Weboberfläche für administrative und therapeutische Prozesse. Ein zentrales Ziel des Projekts ist die Entwicklung eines Android-Launchers zur Bereitstellung mobiler Spiele.
 
 Die Problemstellung ergibt sich daraus, dass Serious Games in der Praxis nicht als isolierte Einzelanwendungen betrachtet werden können. Damit sie im Gesundheitskontext sinnvoll eingesetzt werden können, muss eine Plattform mehrere Anforderungen gleichzeitig erfüllen:
 
@@ -56,9 +56,9 @@ Die Serious-Game-Plattform ist als verteiltes Softwaresystem angelegt. Sie verbi
 
 \begin{itemize}
   \item \textbf{Backend:} Persistenz, Rollenlogik, Upload-Prozesse, Zuweisungen und Session-Daten.
-  \item \textbf{Webanwendung:} Verwaltungsoberfläche für Adminverwaltung und Patientendaten/-sessions.
-  \item \textbf{Python-Launcher:} Windows Anwendung zur Anzeige und zum Start zugewiesener Windows-Spiele des Patienten. 
-  \item \textbf{(Geplant) Android-Launcher:} Mobile Anwendung zur Anzeige und zum Start zugewiesener Android-Spiele des Patienten.
+  \item \textbf{Webanwendung:} Verwaltungsoberfläche für die Administration sowie für Patientendaten und Sessions.
+  \item \textbf{Python-Launcher:} Windows-Anwendung zur Anzeige und zum Start zugewiesener Windows-Spiele.
+  \item \textbf{Android-Launcher:} Mobile Anwendung zur Anzeige und zum Start zugewiesener Android-Spiele.
 \end{itemize}
 
 Aus fachlicher Sicht zeigt das Projekt, dass Serious Games im Gesundheitskontext erst dann praktisch nutzbar werden, wenn diese Systemteile zuverlässig zusammenspielen. Eine Plattform muss deshalb nicht nur Inhalte speichern, sondern den vollständigen Pfad vom Upload eines Spiels bis zur Anzeige seiner Ergebnisse abbilden.
@@ -70,11 +70,11 @@ Der derzeitige Projektstand lässt sich wie folgt zusammenfassen:
 
 \begin{itemize}
   \item Es existiert eine zentrale Struktur zur Verwaltung von Serious Games und zugehörigen Metadaten.
-  \item  Spiele können in den Plattformkontext integriert werden. Diese müssen entweder im ZIP-, EXE- oder JAR-Format hochgeladen werden.
-  \item Sessions und Scores können über das Spiel selbst an die Plattform zurückgegeben werden.
+  \item Spiele können in den Plattformkontext integriert werden und werden derzeit als ZIP-, EXE- oder JAR-Dateien hochgeladen.
+  \item Sessions und Scores können direkt über das jeweilige Spiel an die Plattform zurückgegeben werden.
 \end{itemize}
 
-Aus Projektsicht ist die Lösung damit nicht mehr nur ein loser Prototypenverbund, sondern besitzt bereits zusammenhängenden Module, die miteinander arbeiten.
+Aus Projektsicht ist die Lösung damit nicht mehr nur ein loser Prototypenverbund, sondern verfügt bereits über zusammenhängende Module, die funktional miteinander arbeiten.
 
 \section{Methodisches Vorgehen}
 Die Arbeit am Projekt erfolgte schrittweise entlang der bestehenden Architektur. Ziel war es, zunächst die vorhandenen Zusammenhänge sauber zu verstehen und darauf aufbauend zentrale Komponenten neu zu entwickeln sowie die Integrationsstellen systematisch auszubauen.
@@ -84,10 +84,10 @@ Im ersten Monat lag der Schwerpunkt auf der Analyse und dem Verständnis der bes
 
 Schwerpunkte dieser Phase:
 \begin{itemize}
-\item Analyse der Gesamtarchitektur bestehend aus Backend, Webanwendung sowie Python- und Dockerkomponenten.
-\item Nachvollzug des Datenflusses zwischen Upload, Assignment, Session-Verarbeitung und Anzeige.
-\item Identifikation von Schwachstellen sowie manuellen und potenziell fehleranfälligen Prozessen.
-\item Testdurchgang von Upload eines Spiels bis hin zur Anzeige im Windows-Launcher und Admin/Patientenoberfläche.
+  \item Analyse der Gesamtarchitektur, bestehend aus Backend, Webanwendung sowie Python- und Docker-Komponenten.
+  \item Nachvollzug des Datenflusses zwischen Upload, Assignment, Session-Verarbeitung und Anzeige.
+  \item Identifikation von Schwachstellen sowie manuellen und potenziell fehleranfälligen Prozessen.
+  \item Testdurchgang vom Upload eines Spiels bis hin zur Anzeige im Windows-Launcher sowie in der Admin- und Patientenoberfläche.
 \end{itemize}
 
 \subsection{Monat 2: Entwicklung des Android-Launchers}
@@ -95,24 +95,24 @@ Im zweiten Monat stand die Konzeption und Umsetzung des Android-Launchers im Mit
 
 Wesentliche Tätigkeiten:
 \begin{itemize}
-\item Entwicklung der grundlegenden Struktur und Benutzeroberfläche des Launchers.
-\item Entwickeln einer Login-Ansicht für den Patienten.
-\item Implementierung der Anzeige und Verwaltung verfügbarer Spiele.
-\item Integration von Download/Installieren und Öffnen von Spielen als Platzhalter.
-\item Integration einer Ansicht für die Highscores. 
-\item Aufbau einer stabilen Grundlage für die spätere Integration in die Plattform.
+  \item Entwicklung der grundlegenden Struktur und Benutzeroberfläche des Launchers.
+  \item Entwicklung einer Login-Ansicht für Patientinnen und Patienten.
+  \item Implementierung der Anzeige und Verwaltung verfügbarer Spiele.
+  \item Integration von Download, Installation und Öffnen von Spielen zunächst als Platzhalter.
+  \item Integration einer Ansicht für Highscores.
+  \item Aufbau einer stabilen Grundlage für die spätere Integration in die Plattform.
 \end{itemize}
 
 \subsection{Monat 3: Anbindung des Android-Launchers an das Backend}
-Im dritten Monat wurde der entwickelte Android-Launcher mit dem bestehenden Backend über definierte APIs verknüpft. Ziel war es, eine funktionierende Kommunikation zwischen mobiler Anwendung und Plattform sicherzustellen.
+Im dritten Monat wurde der entwickelte Android-Launcher über definierte APIs mit dem bestehenden Backend verknüpft. Ziel war es, eine funktionierende Kommunikation zwischen mobiler Anwendung und Plattform sicherzustellen.
 
 Im Fokus standen dabei:
 \begin{itemize}
-\item Integration von API-Schnittstellen zur Datenübertragung zwischen Launcher und Backend.
-\item Versenden und Empfangen von JWT-Tokens zum Login 
-\item Synchronisation von Spielinformationen und Nutzungsdaten.
-\item Erkennen der Zuordnung von Patientenspezifischen Spielen und Integration dieser durch Herunterladen im Launcher.
-\item Sicherstellung eines stabilen und konsistenten Datenaustauschs.
+  \item Integration von API-Schnittstellen zur Datenübertragung zwischen Launcher und Backend.
+  \item Versenden und Empfangen von JWT-Tokens für den Login.
+  \item Synchronisation von Spielinformationen und Nutzungsdaten.
+  \item Erkennung patientenspezifisch zugeordneter Spiele und deren Integration durch Herunterladen im Launcher.
+  \item Sicherstellung eines stabilen und konsistenten Datenaustauschs.
 \end{itemize}
 
 \subsection{Monat 4: Erweiterung der Plattformfunktionen und Integration zentraler Abläufe}
@@ -120,33 +120,33 @@ Im vierten Monat lag der Schwerpunkt auf der Erweiterung der Backend-Funktionali
 
 Dabei wurden folgende Aspekte umgesetzt:
 \begin{itemize}
-\item Verknüpfung des Upload-Prozesses von mobilen Spielen in der Admin-Oberfläche mit der Nutzung im Android-Launcher.
-\item Integration von Highscore- und Session-Auswertungen mit Anzeige in der Patienten-Weboberfläche und im Android-Launcher
-\item Umsetzung von Mechanismen zur Patientenerkennung und Zuordnung.
-\item Weiterentwicklung und Ausbau des Backends zur Unterstützung der neuen Anforderungen.
+  \item Verknüpfung des Upload-Prozesses mobiler Spiele in der Admin-Oberfläche mit der Nutzung im Android-Launcher.
+  \item Integration von Highscore- und Session-Auswertungen mit Anzeige in der Patienten-Weboberfläche und im Android-Launcher.
+  \item Umsetzung von Mechanismen zur Patientenerkennung und Zuordnung.
+  \item Weiterentwicklung und Ausbau des Backends zur Unterstützung der neuen Anforderungen.
 \end{itemize}
 
-\subsection{Monat 5: Fehlerbehebungen und Erstellen einer Testapp zum Testen der Datenübertragung}
-Im fünften Monat wurden Fehler behoben und die Abläufe durchgegangen. Weiterhin wurde eine Test-App entwickelt, die weiteren Entwicklern die Funktionsweise der Highscore-Übertragung näherbringen sollte.
+\subsection{Monat 5: Fehlerbehebungen und Erstellung einer Test-App zur Datenübertragung}
+Im fünften Monat wurden Fehler behoben und die zentralen Abläufe erneut durchgetestet. Zusätzlich wurde eine Test-App entwickelt, die weiteren Entwicklerinnen und Entwicklern die Funktionsweise der Highscore-Übertragung näherbringen soll.
 
-Unter anderem wurde integriert:
+Unter anderem wurden folgende Punkte umgesetzt:
 \begin{itemize}
-\item Erstellung einer Testapp als Beispiel für die Highscore-Übertragung
-\item Erstellung der Readme für die Dokumentation des Android Launcher
-\item Fehlerbehebung mit falscher Erkennung von Spielen und der Installation von Spielen im Launcher und des Öffnen 
-\item Erkennen der Zuordnung von Patientenspezifischen Spielen und integration dieser durch Downladen im launcher.
-\item Sicherstellung eines stabilen und konsistenten Datenaustauschs.
+  \item Erstellung einer Test-App als Beispiel für die Highscore-Übertragung.
+  \item Erstellung der README zur Dokumentation des Android-Launchers.
+  \item Fehlerbehebung bei der falschen Erkennung, Installation und dem Öffnen von Spielen im Launcher.
+  \item Verbesserung der Erkennung patientenspezifisch zugeordneter Spiele und ihrer Integration durch Herunterladen im Launcher.
+  \item Sicherstellung eines stabilen und konsistenten Datenaustauschs.
 \end{itemize}
 
 \section{Resultat}
 Aus dem fünfmonatigen Projektzeitraum lassen sich mehrere konkrete Ergebnisse ableiten:
 
 \begin{enumerate}
-\item \textbf{Fundierte Systembasis:} Durch die initiale Analyse wurde ein klares Verständnis der Plattform und ihrer Abläufe geschaffen.
-\item \textbf{Funktionsfähiger Android-Launcher:} Eine eigenständige mobile Anwendung zur Bereitstellung von Spielen wurde entwickelt.
-\item \textbf{Erfolgreiche Backend-Integration:} Der Launcher ist über APIs in die Plattform eingebunden und kann Daten austauschen.
-\item \textbf{Ganzheitliche Prozesskette:} Upload, Nutzung, Highscores und Nutzerzuordnung sind miteinander verknüpft.
-\item \textbf{Erweiterte Plattformfunktionalität:} Backend und Adminverwaltung wurden ausgebaut und bieten eine bessere Grundlage für zukünftige Erweiterungen.
+  \item \textbf{Fundierte Systembasis:} Durch die initiale Analyse wurde ein klares Verständnis der Plattform und ihrer Abläufe geschaffen.
+  \item \textbf{Funktionsfähiger Android-Launcher:} Eine eigenständige mobile Anwendung zur Bereitstellung von Spielen wurde entwickelt.
+  \item \textbf{Erfolgreiche Backend-Integration:} Der Launcher ist über APIs in die Plattform eingebunden und kann Daten austauschen.
+  \item \textbf{Ganzheitliche Prozesskette:} Upload, Nutzung, Highscores und Nutzerzuordnung sind miteinander verknüpft.
+  \item \textbf{Erweiterte Plattformfunktionalität:} Backend und Adminverwaltung wurden ausgebaut und bieten eine bessere Grundlage für zukünftige Erweiterungen.
 \end{enumerate}
 
 \subsection{Einordnung der Ergebnisse}
@@ -167,9 +167,9 @@ Während des Projekts zeigten sich mehrere technische Herausforderungen:
 Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 
 \begin{itemize}
-  \item Erweiterte Auswertungsansichten für Sessions und Scores im Launcher als auch in der Weboberfläche,
-  \item Automatisches Updaten von Spielen
-  \item UI-Verbesserungen und Integration eines möglichen IOS-Launcher.
+  \item erweiterte Auswertungsansichten für Sessions und Scores im Launcher sowie in der Weboberfläche,
+  \item automatisches Aktualisieren von Spielen,
+  \item UI-Verbesserungen sowie die Integration eines möglichen iOS-Launchers.
 \end{itemize}
 
 \newpage
@@ -179,7 +179,7 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/launcher_start_launcher.jpeg}
-    \caption{Startansicht mit Login, Email-Speicherung und Server Setting}
+    \caption{Startansicht mit Login, Speicherung der E-Mail-Adresse und Servereinstellung}
     \label{fig:placeholder}
 \end{figure}
 
@@ -187,7 +187,7 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/launcher_server_setting.jpeg}
-    \caption{Einstellen des lokalen Servers für den Launcher}
+    \caption{Einstellung des lokalen Servers für den Launcher}
     \label{fig:placeholder}
 \end{figure}
 
@@ -195,7 +195,7 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/launcher_open.jpeg}
-    \caption{Spieleübersicht mit Download, Öffnen und Löschen Möglichkeit}
+    \caption{Spieleübersicht mit Download-, Öffnen- und Löschmöglichkeit}
     \label{fig:placeholder}
 \end{figure}
 
@@ -211,17 +211,15 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/launcher_install_game.jpeg}
-    \caption{Installieren eines zugeordneten Spiels}
+    \caption{Installation eines zugeordneten Spiels}
     \label{fig:placeholder}
 \end{figure}
-
-
 
 \subsection{Session- und Score-Ansicht}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/Healthhub_highscore_overview.jpeg}
-    \caption{High-Score Übersicht}
+    \caption{Highscore-Übersicht}
     \label{fig:placeholder}
 \end{figure}
 
@@ -229,11 +227,11 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/Healthhub_score_overview.jpeg}
-    \caption{Zusammenfassung von High-Scores}
+    \caption{Zusammenfassung der Highscores}
     \label{fig:placeholder}
 \end{figure}
 
-\subsection{Gamescore Ansicht}
+\subsection{Gamescore-Ansicht}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/Healthhub_game_stats.jpeg}
@@ -245,7 +243,7 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/test-app-start.jpeg}
-    \caption{Ansicht der Testapp mit Sicht der empfangenden Werte vom Launcher/Api aus dem Backend}
+    \caption{Ansicht der Test-App mit Darstellung der empfangenen Werte vom Launcher bzw. von der API aus dem Backend}
     \label{fig:placeholder}
 \end{figure}
 
@@ -253,7 +251,7 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/test-app-score-send.jpeg}
-    \caption{Bestätigung des Senden von Mockdaten für den Highscore}
+    \caption{Bestätigung des Sendens von Mockdaten für den Highscore}
     \label{fig:placeholder}
 \end{figure}
 
@@ -261,15 +259,15 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{imgs/addOptionApk.png}
-    \caption{Hinzufügen von Mobile Games über Admin-Weboberfläche}
+    \caption{Hinzufügen mobiler Spiele über die Admin-Weboberfläche}
     \label{fig:placeholder}
 \end{figure}
 
-\subsection{Patient-Webansicht für Auswahl von mobile Games}
+\subsection{Patient-Webansicht für die Auswahl mobiler Spiele}
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{imgs/mobileGameAuswahl.png}
-    \caption{Auswahl des Highscores von mobile Games von dem Patienten }
+    \caption{Auswahl der Highscores mobiler Spiele durch den Patienten}
     \label{fig:placeholder}
 \end{figure}
 
@@ -277,20 +275,17 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{imgs/PatientGameStats.png}
-    \caption{High-Scores der versendeten Mockdaten in der Patienten-Weboberfläche}
+    \caption{Highscores der versendeten Mockdaten in der Patienten-Weboberfläche}
     \label{fig:placeholder}
 \end{figure}
 
-\subsection{Android Launcher Highscore der Mockdaten}
+\subsection{Android-Launcher-Highscore der Mockdaten}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{imgs/score-received.jpeg}
-    \caption{High-Scores der versendeten Mockdaten im Android-Launcher}
+    \caption{Highscores der versendeten Mockdaten im Android-Launcher}
     \label{fig:placeholder}
 \end{figure}
-
-
-
 
 \newpage
 \section{Einordnung des Android-Launchers}
@@ -302,7 +297,7 @@ Die Funktion des Launchers lässt sich für den Projektbericht wie folgt zusamme
   \item Der Launcher stellt die auf dem Gerät verfügbaren beziehungsweise zugewiesenen Android-Spiele in einer nutzbaren Oberfläche dar.
   \item Er dient als patientennahe Einstiegskomponente und reduziert den Aufwand, einzelne Spiele manuell zu suchen oder getrennt zu starten.
   \item Neue oder aktualisierte mobile Spiele werden nicht isoliert betrachtet, sondern in einen Plattformprozess aus Verwaltung, Zuweisung und Nutzung eingebettet.
-  \item Für den Projektkontext ist der Launcher deshalb ein zentrales Bindeglied zwischen Web-/Backend-Verwaltung und realem Einsatz des Serious Games auf Android.
+  \item Für den Projektkontext ist der Launcher deshalb ein zentrales Bindeglied zwischen Web-/Backend-Verwaltung und dem realen Einsatz des Serious Games auf Android.
 \end{itemize}
 
 \newpage
