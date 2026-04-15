@@ -7,7 +7,7 @@
 \usepackage{verbatim}
 \usepackage{xcolor}
 \usepackage{listings}
-
+\usepackage{float}
 \usepackage{ragged2e}
 \usepackage{xurl}
 \usepackage{array}
@@ -172,39 +172,127 @@ Für weitere Ausbaustufen sind insbesondere folgende Themen sinnvoll:
   \item UI-Verbesserungen und Integration eines möglichen IOS-Launcher.
 \end{itemize}
 
+\newpage
 \section{Screenshots}
 
 \subsection{Launcher Startansicht}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Android-Launcher Startansicht}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/launcher_start_launcher.jpeg}
+    \caption{Startansicht mit Login, Email-Speicherung und Server Setting}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsection{Launcher Servereinstellung}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/launcher_server_setting.jpeg}
+    \caption{Einstellen des lokalen Servers für den Launcher}
+    \label{fig:placeholder}
+\end{figure}
 
 \subsection{Launcher Spieleübersicht}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Platzhalter: Launcher mit zugewiesenen Spielen}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/launcher_open.jpeg}
+    \caption{Spieleübersicht mit Download, Öffnen und Löschen Möglichkeit}
+    \label{fig:placeholder}
+\end{figure}
 
-\subsection{Launcher Installationsbutton}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Launcher-View mit Spielauswahl, die schon gedownloaded sind}}
+\subsection{Launcher Spieldownload}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/launcher_download.jpeg}
+    \caption{Downloadleiste}
+    \label{fig:placeholder}
+\end{figure}
 
-\subsection{Launcher Öffnenübersicht}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Launcher-View mit schon installiertem Spiel}}
+\subsection{Launcher Game Installation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/launcher_install_game.jpeg}
+    \caption{Installieren eines zugeordneten Spiels}
+    \label{fig:placeholder}
+\end{figure}
 
 
 
 \subsection{Session- und Score-Ansicht}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Anzeige von Sessions und Scores im Android-Launcher}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/Healthhub_highscore_overview.jpeg}
+    \caption{High-Score Übersicht}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsection{Score-Zusammenfassung}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/Healthhub_score_overview.jpeg}
+    \caption{Zusammenfassung von High-Scores}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsection{Gamescore Ansicht}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/Healthhub_game_stats.jpeg}
+    \caption{Details einer Spielsession}
+    \label{fig:placeholder}
+\end{figure}
 
 \subsection{Test-App Ansicht}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Test-App Ansicht}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/test-app-start.jpeg}
+    \caption{Ansicht der Testapp mit Sicht der empfangenden Werte vom Launcher/Api aus dem Backend}
+    \label{fig:placeholder}
+\end{figure}
 
 \subsection{Test-App Session-Übertragung}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Test-App mit Score-Übertragung}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/test-app-score-send.jpeg}
+    \caption{Bestätigung des Senden von Mockdaten für den Highscore}
+    \label{fig:placeholder}
+\end{figure}
 
 \subsection{Admin-Webansicht für die Spielverwaltung}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Webansicht für Ádminsicht bzw. Serious-Game-Verwaltung mit Upload eines mobiles Spiels}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{imgs/addOptionApk.png}
+    \caption{Hinzufügen von Mobile Games über Admin-Weboberfläche}
+    \label{fig:placeholder}
+\end{figure}
 
-\subsection{Patient-Webansicht für Anzeige von Scores}
-\fbox{\parbox[c][7cm][c]{\textwidth}{\centering Webansicht für den Patienten für die zugeordnetetn Spielen bzw. Serious-Games mit Anzeige des Session und Scores}}
+\subsection{Patient-Webansicht für Auswahl von mobile Games}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{imgs/mobileGameAuswahl.png}
+    \caption{Auswahl des Highscores von mobile Games von dem Patienten }
+    \label{fig:placeholder}
+\end{figure}
+
+\subsection{Patient-Webansicht mobile Games Highscore}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{imgs/PatientGameStats.png}
+    \caption{High-Scores der versendeten Mockdaten in der Patienten-Weboberfläche}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsection{Android Launcher Highscore der Mockdaten}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/score-received.jpeg}
+    \caption{High-Scores der versendeten Mockdaten im Android-Launcher}
+    \label{fig:placeholder}
+\end{figure}
 
 
 
+
+\newpage
 \section{Einordnung des Android-Launchers}
 Der Android-Launcher ist innerhalb der Plattform die mobile Ausführungsebene für zugewiesene Spiele. Aus Projektsicht erfüllt er damit nicht nur die Funktion einer Startoberfläche, sondern bildet die Verbindung zwischen zentral verwaltetem Spielbestand und tatsächlicher Nutzung auf dem Endgerät.
 
@@ -217,6 +305,7 @@ Die Funktion des Launchers lässt sich für den Projektbericht wie folgt zusamme
   \item Für den Projektkontext ist der Launcher deshalb ein zentrales Bindeglied zwischen Web-/Backend-Verwaltung und realem Einsatz des Serious Games auf Android.
 \end{itemize}
 
+\newpage
 \appendix
 \section{Anhang: README-Auszug}
 \input{README.tex}
